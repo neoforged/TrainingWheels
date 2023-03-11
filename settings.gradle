@@ -4,4 +4,28 @@ pluginManagement {
         maven { url = 'https://maven.minecraftforge.net/' }
     }
 }
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            plugin('gradleutils', 'net.minecraftforge.gradleutils').version('2.+')
+            plugin('licenser', 'org.cadixdev.licenser').version('0.6.1')
+
+            final mockito = version 'mockito', '4.11.0'
+            final groovy = version 'groovy', '3.0.13'
+
+            library('jimfs', 'com.google.jimfs:jimfs:1.2')
+
+            library('mockito-core', 'org.mockito', 'mockito-core').versionRef(mockito)
+            library('mockito-inline', 'org.mockito', 'mockito-inline').versionRef(mockito)
+            bundle('mockito', ['mockito-core', 'mockito-inline'])
+
+            library('groovy-core', 'org.codehaus.groovy', 'groovy').versionRef(groovy)
+            bundle('groovy', ['groovy-core'])
+        }
+    }
+}
+
+include('base')
+
 rootProject.name = 'TrainingWheels'
