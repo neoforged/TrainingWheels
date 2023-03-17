@@ -1,4 +1,4 @@
 dependencies {
     api gradleApi()
-    api project(':base')
+    api project(':TrainingWheels-Base')
 }

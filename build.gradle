@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.licenser).apply(false)
 }
 
-group = 'net.minecraftforge.trainingwheels'
+group = 'net.minecraftforge'
 version = rootProject.gradleutils.getTagOffsetVersion()
 
 changelog {
@@ -18,7 +18,7 @@ subprojects {
     apply plugin: libs.plugins.licenser.get().pluginId
     apply plugin: 'maven-publish'
 
-    group = 'net.minecraftforge.trainingwheels'
+    group = 'net.minecraftforge'
     version = rootProject.gradleutils.getTagOffsetVersion()
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)

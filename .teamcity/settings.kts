@@ -61,7 +61,7 @@ object Build : BuildType({
             type = "triggerBuildFeature"
             param("triggers", "MinecraftForge_FilesGenerator_GeneratePages")
             param("parameters", """
-                base
+                env.PUBLISHED_JAVA_ARTIFACT_ID=TrainingWheels-Base
                 env.PUBLISHED_JAVA_ARTIFACT_VERSION
                 env.PUBLISHED_JAVA_GROUP
             """.trimIndent())
@@ -72,7 +72,7 @@ object Build : BuildType({
             type = "triggerBuildFeature"
             param("triggers", "MinecraftForge_FilesGenerator_GeneratePages")
             param("parameters", """
-                gradle-base
+                env.PUBLISHED_JAVA_ARTIFACT_ID=TrainingWheels-Gradle-Base
                 env.PUBLISHED_JAVA_ARTIFACT_VERSION
                 env.PUBLISHED_JAVA_GROUP
             """.trimIndent())
@@ -83,7 +83,7 @@ object Build : BuildType({
             type = "triggerBuildFeature"
             param("triggers", "MinecraftForge_FilesGenerator_GeneratePages")
             param("parameters", """
-                gradle-functional
+                env.PUBLISHED_JAVA_ARTIFACT_ID=TrainingWheels-Gradle-Functional
                 env.PUBLISHED_JAVA_ARTIFACT_VERSION
                 env.PUBLISHED_JAVA_GROUP
             """.trimIndent())

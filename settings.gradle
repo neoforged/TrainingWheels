@@ -36,3 +36,7 @@ include('gradle-base')
 include('gradle-functional')
 
 rootProject.name = 'TrainingWheels'
+
+project(':base').name = "TrainingWheels-Base"
+project(':gradle-base').name = "TrainingWheels-Gradle-Base"
+project(':gradle-functional').name = "TrainingWheels-Gradle-Functional"
