@@ -4,7 +4,7 @@ plugins {
 }
 
 changelog {
-    fromCommit 'f97557166ae5953a9da01adbbbeb6ec45ef5326d' // TODO - change to tag
+    fromTag '1.0'
 }
 
 subprojects {
