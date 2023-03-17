@@ -9,6 +9,7 @@ changelog {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'groovy'
     apply plugin: libs.plugins.gradleutils.get().pluginId
     apply plugin: libs.plugins.licenser.get().pluginId

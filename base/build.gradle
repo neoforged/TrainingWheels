@@ -1,4 +1,4 @@
 dependencies {
-    implementation libs.jimfs
-    implementation libs.bundles.mockito
+    api libs.jimfs
+    api libs.bundles.mockito
 }

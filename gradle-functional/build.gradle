@@ -1,0 +1,9 @@
+dependencies {
+    api project(':gradle-base')
+    api gradleTestKit()
+    api libs.junit
+    api libs.guava
+    api(libs.spock){
+        exclude group: 'org.apache.groovy'
+    }
+}

@@ -13,8 +13,10 @@ dependencyResolutionManagement {
 
             final mockito = version 'mockito', '4.11.0'
             final groovy = version 'groovy', '3.0.13'
+            final junit = version 'junit', '5.9.2'
 
             library('jimfs', 'com.google.jimfs:jimfs:1.2')
+            library('guava', 'com.google.guava:guava:31.1-jre')
 
             library('mockito-core', 'org.mockito', 'mockito-core').versionRef(mockito)
             library('mockito-inline', 'org.mockito', 'mockito-inline').versionRef(mockito)
@@ -22,10 +24,15 @@ dependencyResolutionManagement {
 
             library('groovy-core', 'org.codehaus.groovy', 'groovy').versionRef(groovy)
             bundle('groovy', ['groovy-core'])
+
+            library('spock', 'org.spockframework:spock-core:2.1-groovy-3.0')
+            library('junit', 'org.junit.jupiter', 'junit-jupiter').versionRef(junit)
         }
     }
 }
 
 include('base')
+include('gradle-base')
+include('gradle-functional')
 
 rootProject.name = 'TrainingWheels'
