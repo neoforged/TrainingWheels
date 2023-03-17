@@ -13,6 +13,7 @@ subprojects {
     apply plugin: 'groovy'
     apply plugin: libs.plugins.gradleutils.get().pluginId
     apply plugin: libs.plugins.licenser.get().pluginId
+    apply plugin: 'maven-publish'
 
     group = 'net.minecraftforge.trainingwheels'
     version = rootProject.gradleutils.getTagOffsetVersion()
@@ -29,5 +30,15 @@ subprojects {
         header = rootProject.file('LICENSE-header')
         include '**/*.java'
         include '**/*.groovy'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+            }
+        }
+        repositories {
+            maven gradleutils.getPublishingForgeMaven()
+        }
     }
 }
