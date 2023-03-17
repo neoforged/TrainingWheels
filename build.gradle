@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.licenser).apply(false)
 }
 
+group = 'net.minecraftforge.trainingwheels'
+version = rootProject.gradleutils.getTagOffsetVersion()
+
 changelog {
     fromTag '1.0'
 }
