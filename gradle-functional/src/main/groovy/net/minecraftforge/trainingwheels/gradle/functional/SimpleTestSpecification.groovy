@@ -19,8 +19,8 @@ import java.nio.file.Paths
 
 abstract class SimpleTestSpecification extends Specification {
 
-    private static final boolean DEBUG = false
-    private static final boolean DEBUG_PROJECT_DIR = false
+    public static boolean DEBUG = false
+    public static boolean DEBUG_PROJECT_DIR = false
 
     public TestInfo state
 
