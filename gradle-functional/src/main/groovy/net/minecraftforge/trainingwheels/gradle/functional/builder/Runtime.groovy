@@ -55,20 +55,20 @@ class Runtime {
 
     private void setupThisAsChild(final Runtime rootProject, final File workspaceDirectory) {
         this.projectDir = new File(workspaceDirectory, this.projectName.replace(":", "/"))
-        this.projectDir.mkdirs();
-        this.rootProject = rootProject;
+        this.projectDir.mkdirs()
+        this.rootProject = rootProject
 
-        setupThis();
+        setupThis()
     }
 
     private void setupThisAsRoot(final File workspaceDirectory) {
-        this.projectDir = workspaceDirectory;
-        this.rootProject = this;
+        this.projectDir = workspaceDirectory
+        this.rootProject = this
 
-        final File settingsFile = new File(this.projectDir, "settings.gradle");
-        settingsFile.getParentFile().mkdirs();
+        final File settingsFile = new File(this.projectDir, "settings.gradle")
+        settingsFile.getParentFile().mkdirs()
         if (this.usesLocalBuildCache) {
-            final File localBuildCacheDirectory = new File(this.projectDir, "cache/build");
+            final File localBuildCacheDirectory = new File(this.projectDir, "cache/build")
             settingsFile << """
                 buildCache {
                     local {
@@ -83,19 +83,22 @@ class Runtime {
 
     private void setupThis() {
         final File propertiesFile = new File(this.projectDir, 'gradle.properties')
-        propertiesFile.getParentFile().mkdirs();
+        propertiesFile.getParentFile().mkdirs()
         Files.write(propertiesFile.toPath(), this.properties.entrySet().stream().map {e -> "${e.getKey()}=$e.value".toString() }.collect(Collectors.toList()), StandardOpenOption.CREATE_NEW)
 
-        this.files.forEach {(String file, String content) -> {
-            final File target = new File(this.projectDir, file);
-            target.getParentFile().mkdirs();
-            target << content;
-        }}
+        for (final def e in this.files.entrySet() ) {
+            final String file = e.getKey()
+            final String content = e.getValue()
+
+            final File target = new File(this.projectDir, file)
+            target.getParentFile().mkdirs()
+            target << content
+        }
     }
 
     BuildResult run(final Consumer<RunBuilder> runBuilderConsumer) {
         if (this.rootProject != null && this.rootProject != this)
-            throw new IllegalStateException("Tried to run none root build!");
+            throw new IllegalStateException("Tried to run none root build!")
 
         final RunBuilder runBuilder = new RunBuilder()
         runBuilderConsumer.accept(runBuilder)
@@ -149,7 +152,7 @@ class Runtime {
         }
 
         Runtime create() {
-            return new Runtime(this.projectName, this.properties, this.usesLocalBuildCache, this.files);
+            return new Runtime(this.projectName, this.properties, this.usesLocalBuildCache, this.files)
         }
     }
 
