@@ -7,6 +7,8 @@ package net.minecraftforge.trainingwheels.gradle.functional
 
 import com.google.common.collect.Maps
 import net.minecraftforge.trainingwheels.gradle.functional.builder.Runtime
+import org.gradle.internal.impldep.org.junit.Rule
+import org.gradle.internal.impldep.org.junit.rules.TestName
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInfo
 import spock.lang.Specification
@@ -16,7 +18,7 @@ import java.util.function.Consumer
 
 abstract class BuilderBasedTestSpecification extends Specification {
 
-    private TestInfo state;
+    @Rule TestName name = new TestName()
 
     @TempDir
     protected File testTempDirectory
@@ -26,13 +28,8 @@ abstract class BuilderBasedTestSpecification extends Specification {
     private Map<Runtime, Runtime> roots = Maps.newHashMap()
     private Map<String, Runtime> runtimes = Maps.newHashMap()
 
-    @BeforeEach
-    void configureState(TestInfo state) {
-        this.state = state;
-    }
-
     def setup() {
-        this.projectDirectory = new File(testTempDirectory, state.getDisplayName())
+        this.projectDirectory = new File(testTempDirectory, name.getMethodName())
         this.registeredRuntimesAreConfigured = true
         runtimes.values().forEach {runtime -> {
             final Runtime root = this.roots.get(runtime)
