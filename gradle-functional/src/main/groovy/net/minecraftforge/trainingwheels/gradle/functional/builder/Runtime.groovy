@@ -94,7 +94,7 @@ class Runtime {
     }
 
     BuildResult run(final Consumer<RunBuilder> runBuilderConsumer) {
-        if (this.rootProject != this)
+        if (this.rootProject != null && this.rootProject != this)
             throw new IllegalStateException("Tried to run none root build!");
 
         final RunBuilder runBuilder = new RunBuilder()
