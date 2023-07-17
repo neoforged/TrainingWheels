@@ -16,6 +16,8 @@ import java.util.function.Consumer
 
 abstract class BuilderBasedTestSpecification extends Specification {
 
+    private TestInfo state;
+
     @TempDir
     protected File testTempDirectory
     protected File projectDirectory
@@ -26,6 +28,10 @@ abstract class BuilderBasedTestSpecification extends Specification {
 
     @BeforeEach
     void configureState(TestInfo state) {
+        this.state = state;
+    }
+
+    def setup() {
         this.projectDirectory = new File(testTempDirectory, state.getDisplayName())
         this.registeredRuntimesAreConfigured = true
         runtimes.values().forEach {runtime -> {
