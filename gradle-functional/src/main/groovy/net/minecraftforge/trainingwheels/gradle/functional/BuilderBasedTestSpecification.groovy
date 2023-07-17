@@ -18,8 +18,6 @@ import java.util.function.Consumer
 
 abstract class BuilderBasedTestSpecification extends Specification {
 
-    @Rule TestName name = new TestName()
-
     @TempDir
     protected File testTempDirectory
     protected File projectDirectory
@@ -29,7 +27,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
     private Map<String, Runtime> runtimes = Maps.newHashMap()
 
     def setup() {
-        this.projectDirectory = new File(testTempDirectory, name.getMethodName())
+        this.projectDirectory = new File(testTempDirectory, specificationContext.currentIteration.displayName)
         this.registeredRuntimesAreConfigured = true
         runtimes.values().forEach {runtime -> {
             final Runtime root = this.roots.get(runtime)
