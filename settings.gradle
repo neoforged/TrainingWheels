@@ -1,14 +1,18 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://maven.neoforged.net/releases' }
     }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
 }
 
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            plugin('gradleutils', 'net.minecraftforge.gradleutils').version('2.+')
+            plugin('gradleutils', 'net.neoforged.gradleutils').version('2.+')
             plugin('licenser', 'org.cadixdev.licenser').version('0.6.1')
 
             final mockito = version 'mockito', '4.11.0'
