@@ -90,7 +90,7 @@ class Runtime {
         final File propertiesFile = new File(this.projectDir, 'gradle.properties')
         propertiesFile.getParentFile().mkdirs()
 
-        this.properties.put('org.gradle.jvmargs', this.jvmArgs.stream().collect(Collectors.joining(' ')))
+        this.properties.put('org.gradle.jvmargs', String.join(" ", this.jvmArgs))
         Files.write(propertiesFile.toPath(), this.properties.entrySet().stream().map {e -> "${e.getKey()}=$e.value".toString() }.collect(Collectors.toList()), StandardOpenOption.CREATE_NEW)
 
         for (final def e in this.files.entrySet() ) {
