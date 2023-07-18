@@ -18,7 +18,7 @@ subprojects {
     apply plugin: libs.plugins.licenser.get().pluginId
     apply plugin: 'maven-publish'
 
-    group = 'net.minecraftforge'
+    group = 'net.neoforged'
     version = rootProject.gradleutils.getTagOffsetVersion()
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)

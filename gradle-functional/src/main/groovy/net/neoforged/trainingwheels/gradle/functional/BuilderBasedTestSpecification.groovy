@@ -3,14 +3,10 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.trainingwheels.gradle.functional
+package net.neoforged.trainingwheels.gradle.functional
 
 import com.google.common.collect.Maps
-import net.minecraftforge.trainingwheels.gradle.functional.builder.Runtime
-import org.gradle.internal.impldep.org.junit.Rule
-import org.gradle.internal.impldep.org.junit.rules.TestName
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.TestInfo
+import net.neoforged.trainingwheels.gradle.functional.builder.Runtime
 import spock.lang.Specification
 import spock.lang.TempDir
 

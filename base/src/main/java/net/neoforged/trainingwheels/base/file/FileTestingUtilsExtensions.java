@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.trainingwheels.base.file;
+package net.neoforged.trainingwheels.base.file;
 
 import com.google.common.jimfs.Jimfs;
 

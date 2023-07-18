@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.trainingwheels.gradle.functional.builder
+package net.neoforged.trainingwheels.gradle.functional.builder
 
 import com.google.common.collect.Lists
 import com.google.common.collect.Maps

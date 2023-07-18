@@ -1,3 +1,3 @@
 moduleName=trainingwheels-base-extensions
 moduleVersion=1.0.0
-staticExtensionClasses=net.minecraftforge.trainingwheels.base.file.FileTestingUtilsExtensions
+staticExtensionClasses=net.neoforged.trainingwheels.base.file.FileTestingUtilsExtensions

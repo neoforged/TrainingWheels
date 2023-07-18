@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.trainingwheels.gradle.functional
+package net.neoforged.trainingwheels.gradle.functional
 
 import com.google.common.collect.Lists
-import net.minecraftforge.trainingwheels.gradle.functional.util.LoggerWriter
+import net.neoforged.trainingwheels.gradle.functional.util.LoggerWriter
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.BeforeEach

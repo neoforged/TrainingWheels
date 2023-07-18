@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.trainingwheels.gradle.functional.util
+package net.neoforged.trainingwheels.gradle.functional.util
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
