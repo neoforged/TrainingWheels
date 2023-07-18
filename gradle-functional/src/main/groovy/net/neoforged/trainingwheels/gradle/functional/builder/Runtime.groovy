@@ -7,7 +7,9 @@ package net.neoforged.trainingwheels.gradle.functional.builder
 
 import com.google.common.collect.Lists
 import com.google.common.collect.Maps
+import com.google.common.collect.Sets
 import groovy.transform.CompileStatic
+import org.gradle.launcher.daemon.protocol.Build
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
@@ -21,19 +23,22 @@ class Runtime {
 
     private final String projectName
     private final Map<String, String> properties = Maps.newHashMap()
+    private final Set<String> jvmArgs = Sets.newHashSet();
     private final boolean usesLocalBuildCache
     private final Map<String, String> files
 
     private File projectDir
     private Runtime rootProject
 
-    Runtime(String projectName, Map<String, String> properties, boolean usesLocalBuildCache, Map<String, String> files) {
+    Runtime(String projectName, Map<String, String> properties, final Set<String> jvmArgs, boolean usesLocalBuildCache, Map<String, String> files) {
         this.projectName = projectName
         this.usesLocalBuildCache = usesLocalBuildCache
         this.files = files
 
         this.properties.put('org.gradle.console', 'rich')
         this.properties.putAll(properties)
+
+        this.jvmArgs.addAll(jvmArgs);
     }
 
     private GradleRunner gradleRunner() {
@@ -84,6 +89,8 @@ class Runtime {
     private void setupThis() {
         final File propertiesFile = new File(this.projectDir, 'gradle.properties')
         propertiesFile.getParentFile().mkdirs()
+
+        this.properties.put('org.gradle.jvmargs', this.jvmArgs.stream().collect(Collectors.joining(' ')))
         Files.write(propertiesFile.toPath(), this.properties.entrySet().stream().map {e -> "${e.getKey()}=$e.value".toString() }.collect(Collectors.toList()), StandardOpenOption.CREATE_NEW)
 
         for (final def e in this.files.entrySet() ) {
@@ -125,6 +132,7 @@ class Runtime {
         private final String projectName
 
         private final Map<String, String> properties = Maps.newHashMap()
+        private final Set<String> jvmArgs = Sets.newHashSet();
         private final Map<String, String> files = Maps.newHashMap()
 
         private boolean usesLocalBuildCache = true
@@ -143,6 +151,19 @@ class Runtime {
             return this
         }
 
+        Builder jvmArg(final String value) {
+            this.jvmArgs.add(value)
+            return this
+        }
+
+        Builder maxMemory(final String memoryNotation) {
+            return jvmArg("-Xmx$memoryNotation")
+        }
+
+        Builder parallel() {
+            return property('org.gradle.parallel', 'true')
+        }
+
         Builder file(final String path, final String content) {
             this.files.put(path, content)
             return this
@@ -153,7 +174,7 @@ class Runtime {
         }
 
         Runtime create() {
-            return new Runtime(this.projectName, this.properties, this.usesLocalBuildCache, this.files)
+            return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.files)
         }
     }
 
