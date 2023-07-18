@@ -106,7 +106,8 @@ class Runtime {
         final GradleRunner runner = gradleRunner()
 
         final List<String> arguments = Lists.newArrayList(runBuilder.arguments)
-        arguments.addAll(runBuilder.logLevel.getArgument())
+        if (runBuilder.logLevel.isRequiredAsArgument)
+            arguments.addAll(runBuilder.logLevel.getArgument())
         arguments.addAll(runBuilder.tasks)
 
         if (runBuilder.shouldFail) {
@@ -192,14 +193,22 @@ class Runtime {
         DEBUG('debug');
 
         private final String argument
+        private final boolean isRequiredAsArgument;
 
         LogLevel(String argument = '') {
+            if (argument == '') {
+                isRequiredAsArgument = false;
+                this.argument = ''
+                return;
+            }
+
+            this.isRequiredAsArgument = true;
             this.argument = argument
         }
 
         String getArgument() {
-            if (argument.isEmpty())
-                return ''
+            if (!isRequiredAsArgument)
+                throw new IllegalStateException("No argument is needed.")
 
             return "--$argument"
         }
