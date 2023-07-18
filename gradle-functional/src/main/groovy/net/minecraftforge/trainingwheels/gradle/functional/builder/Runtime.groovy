@@ -105,9 +105,9 @@ class Runtime {
 
         final GradleRunner runner = gradleRunner()
 
-        final List<String> arguments = Lists.newArrayList(runBuilder.tasks)
-        arguments.addAll(runBuilder.arguments)
+        final List<String> arguments = Lists.newArrayList(runBuilder.arguments)
         arguments.addAll(runBuilder.logLevel.getArgument())
+        arguments.addAll(runBuilder.tasks)
 
         if (runBuilder.shouldFail) {
             return runner.withArguments(arguments).buildAndFail()
