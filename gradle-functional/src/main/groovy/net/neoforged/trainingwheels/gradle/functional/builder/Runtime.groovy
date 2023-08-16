@@ -9,7 +9,6 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.google.common.collect.Sets
 import groovy.transform.CompileStatic
-import org.gradle.launcher.daemon.protocol.Build
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
@@ -26,11 +25,12 @@ class Runtime {
     private final Set<String> jvmArgs = Sets.newHashSet();
     private final boolean usesLocalBuildCache
     private final Map<String, String> files
+    private final Map<String, String> plugins;
 
     private File projectDir
     private Runtime rootProject
 
-    Runtime(String projectName, Map<String, String> properties, final Set<String> jvmArgs, boolean usesLocalBuildCache, Map<String, String> files) {
+    Runtime(String projectName, Map<String, String> properties, final Set<String> jvmArgs, boolean usesLocalBuildCache, Map<String, String> files, Map<String, String> plugins) {
         this.projectName = projectName
         this.usesLocalBuildCache = usesLocalBuildCache
         this.files = files
@@ -39,6 +39,7 @@ class Runtime {
         this.properties.putAll(properties)
 
         this.jvmArgs.addAll(jvmArgs);
+        this.plugins = plugins
     }
 
     private GradleRunner gradleRunner() {
@@ -72,6 +73,7 @@ class Runtime {
 
         final File settingsFile = new File(this.projectDir, "settings.gradle")
         settingsFile.getParentFile().mkdirs()
+
         if (this.usesLocalBuildCache) {
             final File localBuildCacheDirectory = new File(this.projectDir, "cache/build")
             settingsFile << """
@@ -83,6 +85,8 @@ class Runtime {
             """
         }
 
+        settingsFile << "rootProject.name = '${this.projectName}'"
+
         setupThis()
     }
 
@@ -92,6 +96,21 @@ class Runtime {
 
         this.properties.put('org.gradle.jvmargs', String.join(" ", this.jvmArgs))
         Files.write(propertiesFile.toPath(), this.properties.entrySet().stream().map {e -> "${e.getKey()}=$e.value".toString() }.collect(Collectors.toList()), StandardOpenOption.CREATE_NEW)
+
+        final File buildGradleFile = new File(this.projectDir, 'build.gradle');
+        if (!plugins.isEmpty()) {
+            buildGradleFile << 'plugins {'
+            plugins.keySet().forEach {pluginId ->
+                final String version = plugins.get(pluginId);
+                String line = "   id: '${pluginId}'"
+                if (!version.isEmpty()) {
+                    line += ", version: '${version}'"
+                }
+
+                buildGradleFile << line
+            }
+            buildGradleFile << '}'
+        }
 
         for (final def e in this.files.entrySet() ) {
             final String file = e.getKey()
@@ -134,15 +153,16 @@ class Runtime {
         private final Map<String, String> properties = Maps.newHashMap()
         private final Set<String> jvmArgs = Sets.newHashSet();
         private final Map<String, String> files = Maps.newHashMap()
+        private final Map<String, String> plugins = Maps.newHashMap()
 
-        private boolean usesLocalBuildCache = true
+        private boolean usesLocalBuildCache = false
 
         Builder(String projectName) {
             this.projectName = projectName
         }
 
-        Builder disableLocalBuildCache() {
-            this.usesLocalBuildCache = false
+        Builder enableLocalBuildCache() {
+            this.usesLocalBuildCache = true
             return this
         }
 
@@ -173,8 +193,21 @@ class Runtime {
             return this.file('build.gradle', content)
         }
 
+        Builder settings(final String content) {
+            return this.file("settings.gradle", content)
+        }
+
+        Builder plugin(final String pluginId) {
+            this.plugin(pluginId, "");
+        }
+
+        Builder plugin(final String pluginId, final String pluginVersion) {
+            this.plugins.put(pluginId, pluginVersion)
+            return this;
+        }
+
         Runtime create() {
-            return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.files)
+            return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.files, plugins)
         }
     }
 
