@@ -102,9 +102,9 @@ class Runtime {
             buildGradleFile << 'plugins {'
             plugins.keySet().forEach {pluginId ->
                 final String version = plugins.get(pluginId);
-                String line = "   id: '${pluginId}'"
+                String line = "   id '${pluginId}'"
                 if (!version.isEmpty()) {
-                    line += ", version: '${version}'"
+                    line += " version: '${version}'"
                 }
 
                 buildGradleFile << line

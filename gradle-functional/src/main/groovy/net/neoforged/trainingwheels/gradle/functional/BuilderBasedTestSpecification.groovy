@@ -22,6 +22,28 @@ abstract class BuilderBasedTestSpecification extends Specification {
     private Map<Runtime, Runtime> roots = Maps.newHashMap()
     private Map<String, Runtime> runtimes = Maps.newHashMap()
 
+    private final String pluginUnderTest;
+    private final boolean injectIntoAllProject;
+    private final boolean injectIntoRootProject
+
+    BuilderBasedTestSpecification() {
+        pluginUnderTest = null;
+        injectIntoAllProject = false;
+        injectIntoRootProject = false;
+    }
+
+    BuilderBasedTestSpecification(String pluginUnderTest) {
+        this.pluginUnderTest = pluginUnderTest
+        this.injectIntoAllProject = true;
+        this.injectIntoRootProject = true;
+    }
+
+    BuilderBasedTestSpecification(String pluginUnderTest, boolean injectIntoAllProject, boolean injectIntoRootProject) {
+        this.pluginUnderTest = pluginUnderTest
+        this.injectIntoAllProject = injectIntoAllProject
+        this.injectIntoRootProject = injectIntoRootProject
+    }
+
     def setup() {
         this.projectDirectory = new File(testTempDirectory, specificationContext.currentIteration.displayName)
         this.registeredRuntimesAreConfigured = true
@@ -35,16 +57,13 @@ abstract class BuilderBasedTestSpecification extends Specification {
     protected Runtime create(final String name, final Consumer<Runtime.Builder> builderConsumer) {
         final Runtime.Builder builder = new Runtime.Builder(name)
         builderConsumer.accept(builder)
-        final Runtime runtime = builder.create()
 
-        if (this.registeredRuntimesAreConfigured) {
-            final File workingDirectory = new File(projectDirectory, name)
-            runtime.setup(runtime, workingDirectory)
+        if (pluginUnderTest != null && !pluginUnderTest.isEmpty() && (injectIntoRootProject || injectIntoAllProject)) {
+            builder.plugin(pluginUnderTest)
         }
 
-        this.runtimes.put(name, runtime)
-        this.roots.put(runtime, runtime)
-        return runtime
+        final Runtime runtime = builder.create()
+        return registerProjectFrom(runtime, name, runtime)
     }
 
     protected Runtime create(final String root, String name, final Consumer<Runtime.Builder> builderConsumer) {
@@ -59,11 +78,19 @@ abstract class BuilderBasedTestSpecification extends Specification {
     protected Runtime create(final Runtime rootRuntime, String name, final Consumer<Runtime.Builder> builderConsumer) {
         final Runtime.Builder builder = new Runtime.Builder(name)
         builderConsumer.accept(builder)
-        final Runtime runtime = builder.create()
 
+        if (pluginUnderTest != null && !pluginUnderTest.isEmpty() && injectIntoAllProject) {
+            builder.plugin(pluginUnderTest)
+        }
+
+        final Runtime runtime = builder.create()
+        return registerProjectFrom(runtime, name, rootRuntime)
+    }
+
+    private Runtime registerProjectFrom(Runtime runtime, String name, Runtime rootRuntime) {
         if (this.registeredRuntimesAreConfigured) {
             final File workingDirectory = new File(projectDirectory, name)
-            runtime.setup(rootRuntime, workingDirectory)
+            runtime.setup(runtime, workingDirectory)
         }
 
         this.runtimes.put(name, runtime)
