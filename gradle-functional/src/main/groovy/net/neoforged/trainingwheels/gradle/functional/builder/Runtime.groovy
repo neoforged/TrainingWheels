@@ -81,7 +81,7 @@ class Runtime {
                     local {
                         directory '${localBuildCacheDirectory.toURI()}'
                     }
-                }
+                } \n\n
             """
         }
 
@@ -99,7 +99,7 @@ class Runtime {
 
         final File buildGradleFile = new File(this.projectDir, 'build.gradle');
         if (!plugins.isEmpty()) {
-            buildGradleFile << 'plugins {'
+            buildGradleFile << 'plugins {\n'
             plugins.keySet().forEach {pluginId ->
                 final String version = plugins.get(pluginId);
                 String line = "   id '${pluginId}'"
@@ -107,9 +107,9 @@ class Runtime {
                     line += " version: '${version}'"
                 }
 
-                buildGradleFile << line
+                buildGradleFile << line + "\n";
             }
-            buildGradleFile << '}'
+            buildGradleFile << '} \n\n'
         }
 
         for (final def e in this.files.entrySet() ) {
