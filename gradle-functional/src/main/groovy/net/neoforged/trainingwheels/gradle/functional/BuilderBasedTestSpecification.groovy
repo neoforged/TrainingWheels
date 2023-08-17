@@ -26,7 +26,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
     private boolean injectIntoAllProject;
     private boolean injectIntoRootProject
 
-    def setup() {
+    protected setup() {
         pluginUnderTest = null;
         injectIntoAllProject = false;
         injectIntoRootProject = false;
@@ -34,7 +34,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
         setupInner()
     }
 
-    def setup(String pluginUnderTest) {
+    protected setup(String pluginUnderTest) {
         this.pluginUnderTest = pluginUnderTest
         this.injectIntoAllProject = true;
         this.injectIntoRootProject = true;
@@ -42,7 +42,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
         setupInner()
     }
 
-    def setup(String pluginUnderTest, boolean injectIntoAllProject, boolean injectIntoRootProject) {
+    protected setup(String pluginUnderTest, boolean injectIntoAllProject, boolean injectIntoRootProject) {
         this.pluginUnderTest = pluginUnderTest
         this.injectIntoAllProject = injectIntoAllProject
         this.injectIntoRootProject = injectIntoRootProject
