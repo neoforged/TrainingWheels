@@ -22,29 +22,35 @@ abstract class BuilderBasedTestSpecification extends Specification {
     private Map<Runtime, Runtime> roots = Maps.newHashMap()
     private Map<String, Runtime> runtimes = Maps.newHashMap()
 
-    private final String pluginUnderTest;
-    private final boolean injectIntoAllProject;
-    private final boolean injectIntoRootProject
+    private String pluginUnderTest;
+    private boolean injectIntoAllProject;
+    private boolean injectIntoRootProject
 
-    BuilderBasedTestSpecification() {
+    def setup() {
         pluginUnderTest = null;
         injectIntoAllProject = false;
         injectIntoRootProject = false;
+
+        setupInner()
     }
 
-    BuilderBasedTestSpecification(String pluginUnderTest) {
+    def setup(String pluginUnderTest) {
         this.pluginUnderTest = pluginUnderTest
         this.injectIntoAllProject = true;
         this.injectIntoRootProject = true;
+
+        setupInner()
     }
 
-    BuilderBasedTestSpecification(String pluginUnderTest, boolean injectIntoAllProject, boolean injectIntoRootProject) {
+    def setup(String pluginUnderTest, boolean injectIntoAllProject, boolean injectIntoRootProject) {
         this.pluginUnderTest = pluginUnderTest
         this.injectIntoAllProject = injectIntoAllProject
         this.injectIntoRootProject = injectIntoRootProject
+
+        setupInner()
     }
 
-    def setup() {
+    private setupInner() {
         this.projectDirectory = new File(testTempDirectory, specificationContext.currentIteration.displayName)
         this.registeredRuntimesAreConfigured = true
         runtimes.values().forEach {runtime -> {
