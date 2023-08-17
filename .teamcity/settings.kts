@@ -54,41 +54,6 @@ object Build : BuildType({
     id("TrainingWheels__Build")
     name = "Build"
     description = "Builds and Publishes the main branches of the project."
-
-    features {
-        feature {
-            id = "trigger_base_publish"
-            type = "triggerBuildFeature"
-            param("triggers", "MinecraftForge_FilesGenerator_GeneratePages")
-            param("parameters", """
-                env.PUBLISHED_JAVA_ARTIFACT_ID=TrainingWheels-Base
-                env.PUBLISHED_JAVA_ARTIFACT_VERSION
-                env.PUBLISHED_JAVA_GROUP
-            """.trimIndent())
-        }
-
-        feature {
-            id = "trigger_gradle_base_publish"
-            type = "triggerBuildFeature"
-            param("triggers", "MinecraftForge_FilesGenerator_GeneratePages")
-            param("parameters", """
-                env.PUBLISHED_JAVA_ARTIFACT_ID=TrainingWheels-Gradle-Base
-                env.PUBLISHED_JAVA_ARTIFACT_VERSION
-                env.PUBLISHED_JAVA_GROUP
-            """.trimIndent())
-        }
-
-        feature {
-            id = "trigger_gradle-functional_publish"
-            type = "triggerBuildFeature"
-            param("triggers", "MinecraftForge_FilesGenerator_GeneratePages")
-            param("parameters", """
-                env.PUBLISHED_JAVA_ARTIFACT_ID=TrainingWheels-Gradle-Functional
-                env.PUBLISHED_JAVA_ARTIFACT_VERSION
-                env.PUBLISHED_JAVA_GROUP
-            """.trimIndent())
-        }
-    }
 })
 
 object BuildSecondaryBranches : BuildType({
