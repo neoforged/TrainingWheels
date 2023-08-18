@@ -15,7 +15,7 @@ import java.util.function.Consumer
 abstract class BuilderBasedTestSpecification extends Specification {
 
     @TempDir
-    protected File testTempDirectory
+    protected File tempTestDirectory
     protected File projectDirectory
 
     private boolean registeredRuntimesAreConfigured = false
@@ -32,10 +32,14 @@ abstract class BuilderBasedTestSpecification extends Specification {
         injectIntoRootProject = false;
     }
 
+    protected File getTestTempDirectory() {
+        return testTempDirectory;
+    }
+
     def setup() {
         configurePluginUnderTest()
 
-        this.projectDirectory = new File(testTempDirectory, specificationContext.currentIteration.displayName)
+        this.projectDirectory = new File(getTestTempDirectory(), specificationContext.currentIteration.displayName)
         this.registeredRuntimesAreConfigured = true
         runtimes.values().forEach {runtime -> {
             final Runtime root = this.roots.get(runtime)
