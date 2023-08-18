@@ -147,6 +147,10 @@ class Runtime {
         return projectName
     }
 
+    File getProjectDir() {
+        return projectDir
+    }
+
     static class Builder {
         private final String projectName
 
