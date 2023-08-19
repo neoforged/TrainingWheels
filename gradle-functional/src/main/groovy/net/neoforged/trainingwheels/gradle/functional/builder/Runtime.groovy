@@ -131,6 +131,10 @@ class Runtime {
 
         final GradleRunner runner = gradleRunner()
 
+        if (runBuilder.debug) {
+            runner.withDebug(true)
+        }
+
         final List<String> arguments = Lists.newArrayList(runBuilder.arguments)
         if (runBuilder.logLevel.isRequiredAsArgument)
             arguments.addAll(runBuilder.logLevel.getArgument())
@@ -220,6 +224,7 @@ class Runtime {
         private final List<String> arguments = new ArrayList<>()
         private final List<String> tasks = new ArrayList<>()
         private boolean shouldFail = false
+        private boolean debug = false;
 
         private RunBuilder() {
         }
@@ -242,6 +247,11 @@ class Runtime {
         RunBuilder shouldFail() {
             this.shouldFail = true
             return this
+        }
+
+        RunBuilder debug() {
+            this.debug = true;
+            return this;
         }
     }
 
