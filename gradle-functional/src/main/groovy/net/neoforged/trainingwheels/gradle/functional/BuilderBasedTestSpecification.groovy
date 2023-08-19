@@ -15,7 +15,7 @@ import java.util.function.Consumer
 abstract class BuilderBasedTestSpecification extends Specification {
 
     @TempDir
-    protected File tempTestDirectory
+    protected File tempDir
     protected File projectDirectory
 
     private boolean registeredRuntimesAreConfigured = false
@@ -33,7 +33,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
     }
 
     protected File getTestTempDirectory() {
-        return testTempDirectory;
+        return tempDir;
     }
 
     def setup() {
