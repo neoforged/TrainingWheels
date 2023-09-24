@@ -25,12 +25,13 @@ class Runtime {
     private final Set<String> jvmArgs = Sets.newHashSet();
     private final boolean usesLocalBuildCache
     private final Map<String, String> files
-    private final Map<String, String> plugins;
+    private final Map<String, String> plugins
+    private final Map<String, String> settingsPlugins;
 
     private File projectDir
     private Runtime rootProject
 
-    Runtime(String projectName, Map<String, String> properties, final Set<String> jvmArgs, boolean usesLocalBuildCache, Map<String, String> files, Map<String, String> plugins) {
+    Runtime(String projectName, Map<String, String> properties, final Set<String> jvmArgs, boolean usesLocalBuildCache, Map<String, String> files, Map<String, String> plugins, Map<String, String> settingsPlugins) {
         this.projectName = projectName
         this.usesLocalBuildCache = usesLocalBuildCache
         this.files = files
@@ -40,6 +41,7 @@ class Runtime {
 
         this.jvmArgs.addAll(jvmArgs);
         this.plugins = plugins
+        this.settingsPlugins = settingsPlugins
     }
 
     private GradleRunner gradleRunner() {
@@ -73,6 +75,20 @@ class Runtime {
 
         final File settingsFile = new File(this.projectDir, "settings.gradle")
         settingsFile.getParentFile().mkdirs()
+
+        if (!plugins.isEmpty()) {
+            settingsFile << 'plugins {\n'
+            settingsPlugins.keySet().forEach {pluginId ->
+                final String version = settingsPlugins.get(pluginId);
+                String line = "   id '${pluginId}'"
+                if (!version.isEmpty()) {
+                    line += " version: '${version}'"
+                }
+
+                settingsFile << line + "\n";
+            }
+            settingsFile << '} \n\n'
+        }
 
         if (this.usesLocalBuildCache) {
             final File localBuildCacheDirectory = new File(this.projectDir, "cache/build")
@@ -162,6 +178,7 @@ class Runtime {
         private final Set<String> jvmArgs = Sets.newHashSet();
         private final Map<String, String> files = Maps.newHashMap()
         private final Map<String, String> plugins = Maps.newHashMap()
+        private final Map<String, String> settingsPlugins = Maps.newHashMap()
 
         private boolean usesLocalBuildCache = false
 
@@ -214,8 +231,21 @@ class Runtime {
             return this;
         }
 
+        Builder settingsPlugin(final String pluginId) {
+            this.settingsPlugin(pluginId, "");
+        }
+
+        Builder settingsPlugin(final String pluginId, final String pluginVersion) {
+            this.plugins.put(pluginId, pluginVersion)
+            return this;
+        }
+
+        Builder withToolchains() {
+            this.settingsPlugin("org.gradle.toolchains.foojay-resolver-convention", "0.4.0")
+        }
+
         Runtime create() {
-            return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.files, plugins)
+            return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.files, this.plugins, this.settingsPlugins)
         }
     }
 
