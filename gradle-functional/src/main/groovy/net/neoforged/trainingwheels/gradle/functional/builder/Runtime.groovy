@@ -82,7 +82,7 @@ class Runtime {
                 final String version = settingsPlugins.get(pluginId);
                 String line = "   id '${pluginId}'"
                 if (!version.isEmpty()) {
-                    line += " version: '${version}'"
+                    line += " version '${version}'"
                 }
 
                 settingsFile << line + "\n";
