@@ -236,7 +236,7 @@ class Runtime {
         }
 
         Builder settingsPlugin(final String pluginId, final String pluginVersion) {
-            this.plugins.put(pluginId, pluginVersion)
+            this.settingsPlugins.put(pluginId, pluginVersion)
             return this;
         }
 
