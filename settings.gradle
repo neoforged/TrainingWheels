@@ -14,6 +14,7 @@ dependencyResolutionManagement {
         libs {
             plugin('gradleutils', 'net.neoforged.gradleutils').version('2.+')
             plugin('licenser', 'org.cadixdev.licenser').version('0.6.1')
+            plugin('nexus', 'io.github.gradle-nexus.publish-plugin').version('1.3.0')
 
             final mockito = version 'mockito', '4.11.0'
             final groovy = version 'groovy', '3.0.13'

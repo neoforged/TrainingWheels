@@ -1,27 +1,44 @@
 plugins {
+    alias(libs.plugins.nexus)
     alias(libs.plugins.gradleutils)
     alias(libs.plugins.licenser).apply(false)
 }
 
-group = 'net.neoforged'
+group = 'net.neoforged.trainingwheels'
 version = rootProject.gradleutils.getTagOffsetVersion()
 
 changelog {
     fromTag '1.0'
+    disableAutomaticPublicationRegistration()
 }
 
-subprojects {
+nexusPublishing {
+    repositories {
+        sonatype {
+            username.set(System.getenv('SONATYPE_USER') ?: '')
+            password.set(System.getenv('SONATYPE_PASSWORD') ?: '')
+            nexusUrl.set(uri('https://s01.oss.sonatype.org/service/local/'))
+        }
+    }
+}
+
+subprojects { proj ->
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'groovy'
+    apply plugin: 'signing'
     apply plugin: libs.plugins.gradleutils.get().pluginId
     apply plugin: libs.plugins.licenser.get().pluginId
     apply plugin: 'maven-publish'
 
-    group = 'net.neoforged'
+    group = 'net.neoforged.trainingwheels'
     version = rootProject.gradleutils.getTagOffsetVersion()
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+    java {
+        toolchain.languageVersion = JavaLanguageVersion.of(8)
+        withSourcesJar()
+        withJavadocJar()
+    }
 
     repositories {
         repositories {
@@ -39,10 +56,51 @@ subprojects {
         publications {
             mavenJava(MavenPublication) {
                 from components.java
+                artifactId = "${proj.name.toLowerCase()}"
+
+                pom {
+                    name = "${proj.name}"
+                    description = 'Library for testing Gradle Plugins'
+                    url = 'https://github.com/neoforged/trainingwheels'
+                    scm {
+                        url = 'https://github.com/neoforged/trainingwheels'
+                        connection = 'scm:git:git://github.com/neoforged/trainingwheels.git'
+                        developerConnection = 'scm:git:git@github.com:neoforged/trainingwheels.git'
+                    }
+                    issueManagement {
+                        system = 'github'
+                        url = 'https://github.com/neoforged/trainingwheels/issues'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'LGPLv2.1'
+                            url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'neoforged'
+                            name = 'NeoForged'
+                            email = 'contact@neoforged.net'
+                            url = 'https://github.com/NeoForged/'
+                        }
+                    }
+                }
             }
         }
         repositories {
             maven gradleutils.getPublishingForgeMaven()
+        }
+    }
+
+    if (System.getenv('GPG_PRIVATE_KEY')) {
+        signing {
+            final signingKey = System.getenv('GPG_PRIVATE_KEY') ?: ''
+            final signingPassword = System.getenv('GPG_KEY_PASSWORD') ?: ''
+            useInMemoryPgpKeys(signingKey, signingPassword)
+            sign publishing.publications.mavenJava
         }
     }
 }
