@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.licenser).apply(false)
 }
 
-group = 'net.neoforged'
-version = rootProject.gradleutils.getTagOffsetVersion()
+group = 'net.neoforged.trainingwheels'
+version = gradleutils.getTagOffsetVersion()
 
 changelog {
     fromTag '1.0'
