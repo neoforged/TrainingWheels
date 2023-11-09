@@ -39,7 +39,8 @@ abstract class BuilderBasedTestSpecification extends Specification {
     def setup() {
         configurePluginUnderTest()
 
-        this.projectDirectory = new File(getTestTempDirectory(), specificationContext.currentIteration.displayName)
+        // The @TempDir is already per-test, unless explicitly @Shared
+        this.projectDirectory = tempDir
         this.registeredRuntimesAreConfigured = true
         runtimes.values().forEach {runtime -> {
             final Runtime root = this.roots.get(runtime)
