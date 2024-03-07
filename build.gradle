@@ -5,21 +5,17 @@ plugins {
 }
 
 group = 'net.neoforged.trainingwheels'
-version = gradleutils.getTagOffsetVersion()
+gradleutils {
+    version {
+        branches.suffixBranch()
+    }
+    setupCentralPublishing()
+}
+version = gradleutils.version
 
 changelog {
-    fromTag '1.0'
+    from '1.0'
     disableAutomaticPublicationRegistration()
-}
-
-nexusPublishing {
-    repositories {
-        sonatype {
-            username.set(System.getenv('SONATYPE_USER') ?: '')
-            password.set(System.getenv('SONATYPE_PASSWORD') ?: '')
-            nexusUrl.set(uri('https://s01.oss.sonatype.org/service/local/'))
-        }
-    }
 }
 
 subprojects { proj ->
@@ -32,7 +28,8 @@ subprojects { proj ->
     apply plugin: 'maven-publish'
 
     group = 'net.neoforged.trainingwheels'
-    version = rootProject.gradleutils.getTagOffsetVersion()
+    version = rootProject.version
+    gradleutils.setupSigning(signAllPublications: true)
 
     java {
         toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -91,16 +88,7 @@ subprojects { proj ->
             }
         }
         repositories {
-            maven gradleutils.getPublishingForgeMaven()
-        }
-    }
-
-    if (System.getenv('GPG_PRIVATE_KEY')) {
-        signing {
-            final signingKey = System.getenv('GPG_PRIVATE_KEY') ?: ''
-            final signingPassword = System.getenv('GPG_KEY_PASSWORD') ?: ''
-            useInMemoryPgpKeys(signingKey, signingPassword)
-            sign publishing.publications.mavenJava
+            maven gradleutils.publishingMaven
         }
     }
 }
