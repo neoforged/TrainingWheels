@@ -1,5 +1,5 @@
 dependencies {
-    api project(':TrainingWheels-Gradle-Base')
+    api project(':gradle-base')
     api gradleTestKit()
     api libs.junit
     api libs.guava

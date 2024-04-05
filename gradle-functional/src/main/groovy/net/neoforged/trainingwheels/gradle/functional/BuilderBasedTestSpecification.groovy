@@ -40,7 +40,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
         configurePluginUnderTest()
 
         // The @TempDir is already per-test, unless explicitly @Shared
-        this.projectDirectory = tempDir
+        this.projectDirectory = getTestTempDirectory()
         this.registeredRuntimesAreConfigured = true
         runtimes.values().forEach {runtime -> {
             final Runtime root = this.roots.get(runtime)
