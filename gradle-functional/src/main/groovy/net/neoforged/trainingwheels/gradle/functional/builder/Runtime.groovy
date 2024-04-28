@@ -91,10 +91,6 @@ class Runtime {
         final File settingsFile = new File(this.projectDir, "settings.gradle")
         settingsFile.getParentFile().mkdirs()
 
-        if (!settingsPlugins.isEmpty()) {
-
-        }
-
         settingsFile << 'plugins {\n'
         settingsPlugins.keySet().forEach { pluginId ->
             final String version = settingsPlugins.get(pluginId)
