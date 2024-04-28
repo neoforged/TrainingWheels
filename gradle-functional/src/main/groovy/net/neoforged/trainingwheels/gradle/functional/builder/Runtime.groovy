@@ -11,7 +11,9 @@ import com.google.common.collect.Sets
 import groovy.transform.CompileStatic
 import org.apache.tools.ant.util.FileUtils
 import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 
 import java.nio.file.FileVisitResult
 import java.nio.file.FileVisitor
@@ -181,7 +183,7 @@ class Runtime {
         }
     }
 
-    BuildResult run(final Consumer<RunBuilder> runBuilderConsumer) {
+    RunResult run(final Consumer<RunBuilder> runBuilderConsumer) {
         if (this.rootProject != null && this.rootProject != this)
             throw new IllegalStateException("Tried to run none root build!")
 
@@ -239,9 +241,9 @@ class Runtime {
         }
 
         if (runBuilder.shouldFail) {
-            return runner.withArguments(arguments).buildAndFail()
+            return new Result(runner.withArguments(arguments).buildAndFail(), this)
         } else {
-            return runner.withArguments(arguments).build()
+            return new Result(runner.withArguments(arguments).build(), this)
         }
     }
 
@@ -423,5 +425,60 @@ class Runtime {
 
             return "--$argument"
         }
+    }
+
+    private class Result implements RunResult {
+
+        private final BuildResult result;
+        private final Runtime runtime;
+
+        Result(BuildResult result, Runtime runtime) {
+            this.result = result
+            this.runtime = runtime
+        }
+
+        @Override
+        File file(String path) {
+            return new File(runtime.projectDir, path)
+        }
+
+        @Override
+        String getOutput() {
+            return result.getOutput()
+        }
+
+        @Override
+        List<BuildTask> getTasks() {
+            return result.getTasks()
+        }
+
+        @Override
+        List<BuildTask> tasks(TaskOutcome outcome) {
+            return result.tasks(outcome)
+        }
+
+        @Override
+        List<String> taskPaths(TaskOutcome outcome) {
+            return result.taskPaths(outcome)
+        }
+
+        @Override
+        BuildTask task(String taskPath) {
+            return result.task(taskPath)
+        }
+    }
+
+    /**
+     * Represents the result of a build run.
+     */
+    interface RunResult extends BuildResult {
+
+        /**
+         * Returns a file from the project.
+         *
+         * @param path The path to the file.
+         * @return The file.
+         */
+        File file(String path);
     }
 }
