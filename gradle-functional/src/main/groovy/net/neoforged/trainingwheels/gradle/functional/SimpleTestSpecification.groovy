@@ -75,7 +75,6 @@ abstract class SimpleTestSpecification extends Specification {
                 .withPluginClasspath()
                 .withProjectDir(testProjectDir)
                 .withDebug(DEBUG)
-                .withGradleVersion('8.0')
                 .forwardStdOutput(new LoggerWriter(logger, LoggerWriter.Level.INFO))
                 .forwardStdError(new LoggerWriter(logger, LoggerWriter.Level.ERROR))
 
