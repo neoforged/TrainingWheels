@@ -85,7 +85,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
     private Runtime registerProjectFrom(Runtime runtime, String name, Runtime rootRuntime) {
         if (this.registeredRuntimesAreConfigured) {
             final File workingDirectory = new File(projectDirectory, name)
-            runtime.setup(runtime, workingDirectory)
+            runtime.setup(rootRuntime, workingDirectory)
         }
 
         this.runtimes.put(name, runtime)

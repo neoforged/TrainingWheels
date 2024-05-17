@@ -72,7 +72,7 @@ class Runtime {
         if (rootProject == this) {
             setupThisAsRoot(workspaceDirectory)
         } else {
-            setupThisAsChild(rootProject, workspaceDirectory)
+            setupThisAsChild(rootProject, rootProject.projectDir)
         }
     }
 
@@ -80,6 +80,9 @@ class Runtime {
         this.projectDir = new File(workspaceDirectory, this.projectName.replace(":", "/"))
         this.projectDir.mkdirs()
         this.rootProject = rootProject
+
+        final File settingsFile = new File(rootProject.projectDir, "settings.gradle")
+        settingsFile << "include '${this.projectName.replace(":", "/")}'\n"
 
         setupThis()
     }
