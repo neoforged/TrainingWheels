@@ -349,7 +349,7 @@ class Runtime {
         }
 
         Builder withToolchains() {
-            this.settingsPlugin("org.gradle.toolchains.foojay-resolver-convention", "0.4.0")
+            this.settingsPlugin("org.gradle.toolchains.foojay-resolver-convention", "0.8.0")
         }
 
         Runtime create() {
