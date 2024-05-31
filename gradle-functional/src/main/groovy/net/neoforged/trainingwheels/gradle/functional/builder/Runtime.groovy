@@ -112,7 +112,7 @@ class Runtime {
             settingsFile << """
                 buildCache {
                     local {
-                        directory = new File('${localBuildCacheDirectory.absoluteFile.toString()}')
+                        directory = new File('${localBuildCacheDirectory.absoluteFile.toString().replace("\\", "\\\\")}')
                     }
                 } \n\n
             """
