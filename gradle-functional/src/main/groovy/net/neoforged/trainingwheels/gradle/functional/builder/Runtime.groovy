@@ -254,6 +254,10 @@ class Runtime {
         return projectDir
     }
 
+    File file(String path) {
+        return new File(projectDir, path)
+    }
+
     static class Builder {
         private final String projectName
 
