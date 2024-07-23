@@ -3,7 +3,8 @@ dependencies {
     api gradleTestKit()
     api libs.junit
     api libs.guava
-    api(libs.spock){
+    api (libs.spock) {
         exclude group: 'org.apache.groovy'
     }
+    api libs.bundles.commons
 }

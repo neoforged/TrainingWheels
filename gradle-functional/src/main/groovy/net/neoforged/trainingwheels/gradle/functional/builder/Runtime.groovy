@@ -9,7 +9,7 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import com.google.common.collect.Sets
 import groovy.transform.CompileStatic
-import org.apache.tools.ant.util.FileUtils
+import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
@@ -79,6 +79,9 @@ class Runtime {
     private void setupThisAsChild(final Runtime rootProject, final File workspaceDirectory) {
         this.projectDir = new File(workspaceDirectory, this.projectName.replace(":", "/"))
         this.projectDir.mkdirs()
+        if (projectDir.exists()) {
+            FileUtils.cleanDirectory(projectDir)
+        }
         this.rootProject = rootProject
 
         final File settingsFile = new File(rootProject.projectDir, "settings.gradle")
@@ -89,6 +92,9 @@ class Runtime {
 
     private void setupThisAsRoot(final File workspaceDirectory) {
         this.projectDir = workspaceDirectory
+        if (projectDir.exists()) {
+            FileUtils.cleanDirectory(projectDir)
+        }
         this.rootProject = this
 
         final File settingsFile = new File(this.projectDir, "settings.gradle")
@@ -104,7 +110,9 @@ class Runtime {
 
             settingsFile << line + "\n"
         }
-        settingsFile << '   id "com.gradle.develocity" version "3.17"'
+        if (enableBuildScan) {
+            settingsFile << '   id "com.gradle.develocity" version "3.17"\n'
+        }
         settingsFile << '} \n\n'
 
         if (this.usesLocalBuildCache) {
@@ -155,7 +163,11 @@ class Runtime {
         }
 
         this.properties.put('org.gradle.jvmargs', String.join(" ", this.jvmArgs))
-        Files.write(propertiesFile.toPath(), this.properties.entrySet().stream().map { e -> "${e.getKey()}=$e.value".toString() }.collect(Collectors.toList()), StandardOpenOption.CREATE_NEW)
+        final List<String> propertyFileLines = this.properties.entrySet().stream()
+                .map { e -> "${e.getKey()}=$e.value".toString() }
+                .collect(Collectors.toList())
+        final String propertyFileContents = String.join("\n", propertyFileLines)
+        propertiesFile << propertyFileContents
 
         final File buildGradleFile = new File(this.projectDir, 'build.gradle')
         if (!plugins.isEmpty()) {

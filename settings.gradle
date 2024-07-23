@@ -23,6 +23,9 @@ dependencyResolutionManagement {
             library('jimfs', 'com.google.jimfs:jimfs:1.2')
             library('guava', 'com.google.guava:guava:31.1-jre')
 
+            library('commons-io', 'commons-io:commons-io:2.11.0')
+            bundle('commons', ['commons-io'])
+
             library('mockito-core', 'org.mockito', 'mockito-core').versionRef(mockito)
             library('mockito-inline', 'org.mockito', 'mockito-inline').versionRef(mockito)
             bundle('mockito', ['mockito-core', 'mockito-inline'])
