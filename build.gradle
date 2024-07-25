@@ -56,7 +56,7 @@ subprojects { proj ->
 
                 pom {
                     name = "${proj.name}"
-                    description = 'Library for testing Gradle Plugins'
+                    description = 'Library for testing Gradle Plugins both in isolation and in a full project.'
                     url = 'https://github.com/neoforged/trainingwheels'
                     scm {
                         url = 'https://github.com/neoforged/trainingwheels'
