@@ -14,12 +14,12 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.jetbrains.annotations.Nullable
 
 import java.nio.file.FileVisitResult
 import java.nio.file.FileVisitor
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardOpenOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.function.Consumer
 import java.util.stream.Collectors
@@ -203,6 +203,10 @@ class Runtime {
 
         final GradleRunner runner = gradleRunner()
 
+        if (runBuilder.gradleVersion != null) {
+            runner.withGradleVersion(runBuilder.gradleVersion)
+        }
+
         if (runBuilder.debug) {
             runner.withDebug(true)
         }
@@ -380,6 +384,7 @@ class Runtime {
         private boolean shouldFail = false
         private boolean debug = false
         private boolean stacktrace = false
+        private @Nullable String gradleVersion = null;
 
         private RunBuilder() {
         }
@@ -411,6 +416,11 @@ class Runtime {
 
         RunBuilder stacktrace() {
             this.stacktrace = true;
+            return this;
+        }
+
+        RunBuilder gradleVersion(final String version) {
+            this.gradleVersion = version;
             return this;
         }
     }
