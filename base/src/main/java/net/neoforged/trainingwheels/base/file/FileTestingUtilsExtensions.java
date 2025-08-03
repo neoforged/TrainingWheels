@@ -14,6 +14,7 @@ public class FileTestingUtilsExtensions {
      * Creates a new {@link PathFile} instance, with a {@link FileSystem} that is backed
      * in memory. The {@link FileSystem} is created using {@link Jimfs#newFileSystem()}.
      *
+     * @param self the object it is called upon
      * @param path the path to the file, relative to the root of the file system
      * @return the new {@link PathFile} instance
      */
