@@ -16,7 +16,7 @@ dependencyResolutionManagement {
             plugin('licenser', 'net.neoforged.licenser').version('0.7.5')
 
             final mockito = version 'mockito', '4.11.0'
-            final groovy = version 'groovy', '4.0.27'
+            final groovy = version 'groovy', '3.0.13'
             final junit = version 'junit', '5.9.2'
 
             library('jimfs', 'com.google.jimfs:jimfs:1.2')
@@ -32,7 +32,7 @@ dependencyResolutionManagement {
             library('groovy-core', 'org.codehaus.groovy', 'groovy').versionRef(groovy)
             bundle('groovy', ['groovy-core'])
 
-            library('spock', 'org.spockframework:spock-core:2.3-groovy-4.0')
+            library('spock', 'org.spockframework:spock-core:2.1-groovy-3.0')
             library('junit', 'org.junit.jupiter', 'junit-jupiter').versionRef(junit)
         }
     }
