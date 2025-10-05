@@ -8,7 +8,7 @@ gradleutils {
     version {
         branches.suffixBranch()
     }
-    //setupCentralPublishing()
+    setupCentralPublishing()
 }
 version = gradleutils.version
 
