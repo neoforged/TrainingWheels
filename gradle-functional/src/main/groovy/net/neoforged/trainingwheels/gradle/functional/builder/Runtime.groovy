@@ -255,6 +255,16 @@ class Runtime {
             })
         }
 
+        if (runBuilder.properties.size() != 0) {
+            arguments.addAll(
+                    this.properties
+                    .entrySet()
+                    .stream()
+                    .map { e -> "-P${e.key}='${e.value}'"}
+                    .collect()
+            )
+        }
+
         if (runBuilder.shouldFail) {
             return new Result(runner.withArguments(arguments).buildAndFail(), this)
         } else {
@@ -384,7 +394,8 @@ class Runtime {
         private boolean shouldFail = false
         private boolean debug = false
         private boolean stacktrace = false
-        private @Nullable String gradleVersion = null;
+        private @Nullable String gradleVersion = System.getProperty("training-wheels.gradle-version");
+        private Map<String, String> properties = Maps.newHashMap();
 
         private RunBuilder() {
         }
@@ -421,6 +432,11 @@ class Runtime {
 
         RunBuilder gradleVersion(final String version) {
             this.gradleVersion = version;
+            return this;
+        }
+
+        RunBuilder property(final String key, final String value) {
+            this.properties.put(key, value)
             return this;
         }
     }
