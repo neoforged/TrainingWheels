@@ -203,7 +203,7 @@ class Runtime {
 
         final GradleRunner runner = gradleRunner()
 
-        if (runBuilder.gradleVersion != null) {
+        if (runBuilder.gradleVersion != null && runBuilder.gradleVersion != "" && !runBuilder.gradleVersion.equalsIgnoreCase("default")) {
             runner.withGradleVersion(runBuilder.gradleVersion)
         }
 
