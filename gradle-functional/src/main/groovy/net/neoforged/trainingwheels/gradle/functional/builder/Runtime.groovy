@@ -37,12 +37,13 @@ class Runtime {
     private final Map<String, String> files
     private final Map<String, String> plugins
     private final Map<String, String> settingsPlugins
+    private final Map<String, String> environmentVariables
     private final boolean retainBuildDirectoryBetweenRuns
 
     private File projectDir
     private Runtime rootProject
 
-    Runtime(String projectName, Map<String, String> properties, final Set<String> jvmArgs, boolean usesLocalBuildCache, boolean debugBuildCache, boolean usesConfigurationCache, boolean enableBuildScan, Map<String, String> files, Map<String, String> plugins, Map<String, String> settingsPlugins, boolean retainBuildDirectoryBetweenRuns) {
+    Runtime(String projectName, Map<String, String> properties, final Set<String> jvmArgs, boolean usesLocalBuildCache, boolean debugBuildCache, boolean usesConfigurationCache, boolean enableBuildScan, Map<String, String> files, Map<String, String> plugins, Map<String, String> settingsPlugins, boolean retainBuildDirectoryBetweenRuns, Map<String, String> environmentVariables) {
         this.projectName = projectName
         this.usesLocalBuildCache = usesLocalBuildCache
         this.debugBuildCache = debugBuildCache
@@ -57,6 +58,7 @@ class Runtime {
         this.plugins = plugins
         this.settingsPlugins = settingsPlugins
         this.retainBuildDirectoryBetweenRuns = retainBuildDirectoryBetweenRuns
+        this.environmentVariables = environmentVariables
     }
 
     private GradleRunner gradleRunner() {
@@ -265,6 +267,13 @@ class Runtime {
             )
         }
 
+        if (this.environmentVariables.size() > 0) {
+            def workingVariables = runner.getEnvironment() != null ?
+                    new HashMap(runner.getEnvironment()) : new HashMap<>();
+            workingVariables.putAll(this.environmentVariables)
+            runner.withEnvironment(workingVariables);
+        }
+
         if (runBuilder.shouldFail) {
             return new Result(runner.withArguments(arguments).buildAndFail(), this)
         } else {
@@ -292,6 +301,7 @@ class Runtime {
         private final Map<String, String> files = Maps.newHashMap()
         private final Map<String, String> plugins = Maps.newHashMap()
         private final Map<String, String> settingsPlugins = Maps.newHashMap()
+        private final Map<String, String> environmentVariables = Maps.newHashMap();
 
         private boolean usesLocalBuildCache = false
         private boolean debugBuildCache = false
@@ -382,8 +392,13 @@ class Runtime {
             this.settingsPlugin("org.gradle.toolchains.foojay-resolver-convention", "0.8.0")
         }
 
+        Builder withEnvironmentVariable(final String key, final String value) {
+            this.environmentVariables.put(key, value)
+            return this;
+        }
+
         Runtime create() {
-            return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.debugBuildCache, this.usesConfigurationCache, this.enableBuildScan, this.files, this.plugins, this.settingsPlugins, this.retainBuildDirectory)
+            return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.debugBuildCache, this.usesConfigurationCache, this.enableBuildScan, this.files, this.plugins, this.settingsPlugins, this.retainBuildDirectory, this.environmentVariables)
         }
     }
 
