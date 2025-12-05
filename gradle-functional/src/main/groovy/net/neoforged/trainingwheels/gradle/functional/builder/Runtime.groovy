@@ -366,7 +366,7 @@ class Runtime {
         Builder javaClassFile(final String packageAndName, @Language("JAVA") final String content) {
             return this.javaClassFile(
                     "main",
-                    packageAndName.replace(".", "/") + ".java",
+                    packageAndName,
                     content
             )
         }
