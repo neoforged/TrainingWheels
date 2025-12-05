@@ -7,4 +7,5 @@ dependencies {
         exclude group: 'org.apache.groovy'
     }
     api libs.bundles.commons
+    api libs.bundles.jetbrains
 }

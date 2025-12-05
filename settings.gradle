@@ -18,12 +18,16 @@ dependencyResolutionManagement {
             final mockito = version 'mockito', '4.11.0'
             final groovy = version 'groovy', '3.0.13'
             final junit = version 'junit', '5.9.2'
+            final jetbrainsAnnotations = version 'jetbrains', '26.0.2-1'
 
             library('jimfs', 'com.google.jimfs:jimfs:1.2')
             library('guava', 'com.google.guava:guava:31.1-jre')
 
             library('commons-io', 'commons-io:commons-io:2.11.0')
             bundle('commons', ['commons-io'])
+
+            library('jetbrains-annotations', 'org.jetbrains', 'annotations').versionRef(jetbrainsAnnotations)
+            bundle('jetbrains', ['jetbrains-annotations'])
 
             library('mockito-core', 'org.mockito', 'mockito-core').versionRef(mockito)
             library('mockito-inline', 'org.mockito', 'mockito-inline').versionRef(mockito)
