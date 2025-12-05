@@ -10,7 +10,6 @@ import com.google.common.collect.Maps
 import com.google.common.collect.Sets
 import groovy.transform.CompileStatic
 import org.apache.commons.io.FileUtils
-import org.gradle.internal.impldep.org.apache.commons.codec.language.bm.Lang
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
@@ -364,9 +363,17 @@ class Runtime {
             return this
         }
 
-        Builder classFile(final String packageAndName, @Language("JAVA") final String content) {
-            return this.file(
+        Builder javaClassFile(final String packageAndName, @Language("JAVA") final String content) {
+            return this.javaClassFile(
+                    "main",
                     packageAndName.replace(".", "/") + ".java",
+                    content
+            )
+        }
+
+        Builder javaClassFile(final String sourceSet, final String packageAndName, @Language("JAVA") final String content) {
+            return this.file(
+                    "src/" + sourceSet + "/java/" + packageAndName.replace(".", "/") + ".java",
                     content
             )
         }
