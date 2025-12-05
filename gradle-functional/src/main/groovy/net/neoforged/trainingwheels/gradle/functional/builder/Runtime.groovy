@@ -359,7 +359,7 @@ class Runtime {
         }
 
         Builder file(final String path, final String content) {
-            this.files.put(path, content)
+            this.files.put(path, content.stripIndent(true))
             return this
         }
 
