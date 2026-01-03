@@ -270,9 +270,10 @@ class Runtime {
 
         if (this.environmentVariables.size() > 0) {
             def workingVariables = runner.getEnvironment() != null ?
-                    new HashMap(runner.getEnvironment()) : new HashMap<>();
+                    new HashMap(runner.getEnvironment()) : new HashMap<>()
             workingVariables.putAll(this.environmentVariables)
-            runner.withEnvironment(workingVariables);
+            workingVariables.putAll(runBuilder.additionalEnvironmentVariables)
+            runner.withEnvironment(workingVariables)
         }
 
         if (runBuilder.shouldFail) {
@@ -302,7 +303,7 @@ class Runtime {
         private final Map<String, String> files = Maps.newHashMap()
         private final Map<String, String> plugins = Maps.newHashMap()
         private final Map<String, String> settingsPlugins = Maps.newHashMap()
-        private final Map<String, String> environmentVariables = Maps.newHashMap();
+        private final Map<String, String> environmentVariables = Maps.newHashMap()
 
         private boolean usesLocalBuildCache = false
         private boolean debugBuildCache = false
@@ -410,7 +411,7 @@ class Runtime {
 
         Builder withEnvironmentVariable(final String key, final String value) {
             this.environmentVariables.put(key, value)
-            return this;
+            return this
         }
 
         Runtime create() {
@@ -425,8 +426,9 @@ class Runtime {
         private boolean shouldFail = false
         private boolean debug = false
         private boolean stacktrace = false
-        private @Nullable String gradleVersion = System.getProperty("training-wheels.gradle-version");
-        private Map<String, String> properties = Maps.newHashMap();
+        private @Nullable String gradleVersion = System.getProperty("training-wheels.gradle-version")
+        private Map<String, String> properties = Maps.newHashMap()
+        private Map<String, String> additionalEnvironmentVariables = Maps.newHashMap()
 
         private RunBuilder() {
         }
@@ -457,18 +459,23 @@ class Runtime {
         }
 
         RunBuilder stacktrace() {
-            this.stacktrace = true;
-            return this;
+            this.stacktrace = true
+            return this
         }
 
         RunBuilder gradleVersion(final String version) {
-            this.gradleVersion = version;
-            return this;
+            this.gradleVersion = version
+            return this
         }
 
         RunBuilder property(final String key, final String value) {
             this.properties.put(key, value)
-            return this;
+            return this
+        }
+
+        RunBuilder environment(final String key, final String value) {
+            this.additionalEnvironmentVariables.put(key, value)
+            return this
         }
     }
 
@@ -501,8 +508,8 @@ class Runtime {
 
     private class Result implements RunResult {
 
-        private final BuildResult result;
-        private final Runtime runtime;
+        private final BuildResult result
+        private final Runtime runtime
 
         Result(BuildResult result, Runtime runtime) {
             this.result = result
