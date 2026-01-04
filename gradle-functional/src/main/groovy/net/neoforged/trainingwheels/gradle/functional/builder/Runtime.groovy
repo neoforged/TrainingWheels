@@ -297,6 +297,7 @@ class Runtime {
 
     static class Builder {
         private final String projectName
+        private final File tempDir
 
         private final Map<String, String> properties = Maps.newHashMap()
         private final Set<String> jvmArgs = Sets.newHashSet('-Xmx8000m')
@@ -312,8 +313,9 @@ class Runtime {
 
         private boolean retainBuildDirectory = false
 
-        Builder(String projectName) {
+        Builder(String projectName, File tempDir) {
             this.projectName = projectName
+            this.tempDir = tempDir
         }
 
         Builder enableLocalBuildCache() {

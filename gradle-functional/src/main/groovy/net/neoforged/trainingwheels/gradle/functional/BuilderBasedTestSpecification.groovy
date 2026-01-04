@@ -50,7 +50,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
     }
 
     protected Runtime create(final String name, final Consumer<Runtime.Builder> builderConsumer) {
-        final Runtime.Builder builder = new Runtime.Builder(name)
+        final Runtime.Builder builder = new Runtime.Builder(name, tempDir)
         builderConsumer.accept(builder)
 
         if (pluginUnderTest != null && !pluginUnderTest.isEmpty() && (injectIntoRootProject || injectIntoAllProject)) {
@@ -71,7 +71,7 @@ abstract class BuilderBasedTestSpecification extends Specification {
     }
 
     protected Runtime create(final Runtime rootRuntime, String name, final Consumer<Runtime.Builder> builderConsumer) {
-        final Runtime.Builder builder = new Runtime.Builder(name)
+        final Runtime.Builder builder = new Runtime.Builder(name, tempDir)
         builderConsumer.accept(builder)
 
         if (pluginUnderTest != null && !pluginUnderTest.isEmpty() && injectIntoAllProject) {
