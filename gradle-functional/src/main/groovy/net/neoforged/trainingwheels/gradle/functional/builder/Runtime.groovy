@@ -416,6 +416,10 @@ class Runtime {
             return this
         }
 
+        File getTempDir() {
+            return tempDir
+        }
+
         Runtime create() {
             return new Runtime(this.projectName, this.properties, this.jvmArgs, this.usesLocalBuildCache, this.debugBuildCache, this.usesConfigurationCache, this.enableBuildScan, this.files, this.plugins, this.settingsPlugins, this.retainBuildDirectory, this.environmentVariables)
         }
