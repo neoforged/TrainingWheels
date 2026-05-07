@@ -483,6 +483,11 @@ class Runtime {
             this.additionalEnvironmentVariables.put(key, value)
             return this
         }
+
+        RunBuilder offline() {
+            this.arguments("--offline")
+            return this
+        }
     }
 
     static enum LogLevel {
