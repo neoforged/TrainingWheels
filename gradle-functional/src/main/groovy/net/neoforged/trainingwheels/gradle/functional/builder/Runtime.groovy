@@ -263,7 +263,7 @@ class Runtime {
                     this.properties
                     .entrySet()
                     .stream()
-                    .map { e -> "-D${e.key}=${e.value}".toString()}
+                    .map { e -> "-P${e.key}=${e.value}".toString()}
                     .collect()
             )
         }
